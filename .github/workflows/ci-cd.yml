@@ -1,0 +1,33 @@
+name: CI/CD Node.js Backend
+
+on:
+  push:
+    branches: [ main ] # Cada vez que haga un 'git push' (subirlo) a la rama 'main'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # realizara las pruebas en un entorno Linux Ubuntu
+
+
+    steps:
+      # escargar tu código en la computadora 
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v3
+
+      # Configura la versión de Node.js que estoy usando
+      - name: Configurar Node.js (Versión 18)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Instala todas las dependencias que tengo yo (ejecuta npm install)
+      - name: Instalar dependencias
+        run: npm install
+
+      # Ejecutar las pruebas unitaria que configure (ejecuta npm test)
+      - name: Ejecutar pruebas automáticas con Jest
+        run: npm test
+        env:
+          # Añado acceso a mis variables de entorno
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
